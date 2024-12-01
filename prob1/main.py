@@ -37,5 +37,20 @@ def calculate_distance():
     
     print(sum(total_distance))
 
-calculate_distance()
+# Provides the answer to part 1 = 2375403
+# calculate_distance()
             
+# part 2
+list1, list2= process_numbers(file_path)
+
+def claculate_sim_score(first_list, second_list):
+    occurnces = []
+    for num1, num2 in zip(first_list, second_list):
+        num_occurnces = second_list.count(num1)
+        sim_score = int(num1) * int(num_occurnces)
+        occurnces.append(sim_score)
+        
+    print(sum(occurnces))
+    
+# Provides answer to part 2 = 2308227
+# claculate_sim_score(list1, list2)
