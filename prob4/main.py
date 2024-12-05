@@ -36,7 +36,7 @@ def isValid(x, y, sizeX, sizeY):
 
 
 def findWordInDirection(grid, n, m, word, index, x, y, dirX, dirY):
-    """Find multiple instances of the word, avoiding double-counting overlapping matches."""
+    # find multiple instances of the word, this method avoids double counting 
     if index == len(word):  # Full word found
         return True
 
@@ -86,3 +86,72 @@ if __name__ == "__main__":
     printResult(ans)
     print(f"Total count of '{word}': {count}")
 '''
+
+
+# part two: finding X-MAS
+
+def make_matrix2(file_path, num_columns=140):
+    # makes sure that the columns are the correct number as original input when making matrix
+    with open(file_path, 'r') as file:
+        lines = [line.strip() for line in file.readlines()]
+    
+    if not lines:
+        raise ValueError("The file is empty.")
+    
+    matrix = []
+    for line in lines:
+        if len(line) < num_columns:
+            row = list(line.ljust(num_columns))
+        else:
+            row = list(line[:num_columns])
+        matrix.append(row)
+    
+    return matrix
+
+def isValid2(x, y, sizeX, sizeY):
+    # make sure cords are in bound
+    return 0 <= x < sizeX and 0 <= y < sizeY
+
+def find_xmas_pattern2(grid, x, y):
+    # now check for the X-MAS pattern
+    n = len(grid)
+    m = len(grid[0])
+    
+    # check on the bounds for the 3x3 pattern
+    if not (isValid(x - 1, y - 1, n, m) and isValid(x + 1, y + 1, n, m)):
+        return False
+    
+    # validation for the X-MAS pattern
+    diag1 = [grid[x - 1][y - 1], grid[x][y], grid[x + 1][y + 1]]
+    diag2 = [grid[x - 1][y + 1], grid[x][y], grid[x + 1][y - 1]]
+    
+    return (diag1 == ['M', 'A', 'S'] or diag1 == ['S', 'A', 'M']) and \
+           (diag2 == ['M', 'A', 'S'] or diag2 == ['S', 'A', 'M'])
+
+def search_xmas2(grid):
+    n = len(grid)
+    m = len(grid[0])
+    count = 0
+    
+    for x in range(1, n - 1):  # exclude x axis the edges
+        for y in range(1, m - 1):  # exclude y axis the edges
+            if find_xmas_pattern2(grid, x, y):
+                count += 1
+    
+    return count
+
+if __name__ == "__main__":
+    # Example usage
+    file_path = "crossword.txt"
+    matrix = make_matrix2(file_path)
+    
+    # Convert all characters to uppercase for consistency
+    matrix = [[char.upper() for char in row] for row in matrix]
+    
+    # Count X-MAS patterns
+    xmas_count = search_xmas2(matrix)
+    print(f"Total X-MAS patterns found: {xmas_count}")
+
+# above gets the answer for part two finding X-MAS
+# re-wrote the functions to better understand them 
+# answer = 1965
